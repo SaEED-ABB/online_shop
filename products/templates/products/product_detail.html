@@ -1,0 +1,78 @@
+{% extends 'registration/base.html' %}
+{% load humanize %}
+
+{% block content %}
+    <div class="jumbotron detailProduct">
+        <h3>{{ product.name }}</h3>
+        <p>category: <a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></p>
+        <p><b>cost: {{ product.cost|intcomma }}</b> T.</p>
+        <div class="imageClass">
+            <img src="{{ product.image.url }}" class="image" height='{% widthratio product.height 1 2 %}' width='{% widthratio product.width 1 2 %}' alt="image not loaded.">
+        </div>
+        <br>
+        <p>{{ product.text_info }}</p>
+        <p><em>publish time: {{ product.publish_date }}</em></p>
+        {% if request.user.is_authenticated %}
+            <input type="submit" value="Add to basket" id="basketButton" class="btn btn-dark">
+        {% endif %}
+    </div>
+
+    <div class="container jumbotron">
+        <p>You can leave any notes, advices or suggestions here about <b>{{ product.name }}</b>!</p>
+        {% for c in comments %}
+            <div class="commentClass">
+                <h4>{{ c.title }}</h4>
+                <p id="commentText">{{ c.text }}</p>
+                <p><em>written by <b>{{ c.user }}</b> on {{ c.publish_time }}.</em></p>
+            </div>
+            <br>
+        {% endfor %}
+
+        <br>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Leave Comment" class="btn btn-dark">
+        </form>
+    </div>
+{% endblock %}
+
+{% block stylesheet %}
+    <style>
+        .detailProduct {
+            text-align: justify;
+            padding: 1.5em;
+        }
+        .imageClass {
+            {#border: 2px double darkslategray;#}
+            {#text-align: center;#}
+        }
+        #commentText {
+            border: 1px solid lightgray;
+            padding: 3px;
+        }
+        .commentClass {
+            border: 2px solid dimgray;
+            padding: 1.1em;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+{#    <script>#}
+        $('#basketButton').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '{% url "products:add_to_user_basket" %}',
+                method: 'POST',
+                data: {
+                    user_username: '{{ request.user.username }}',
+                    product_slug: '{{ product.slug }}'
+                },
+                success: function (data) {
+                    alert(data['message']);
+                }
+            })
+        })
+    {#</script>#}
+{% endblock %}

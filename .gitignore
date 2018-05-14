@@ -53,6 +53,8 @@ coverage.xml
 *.log
 .static_storage/
 .media/
+media/
+static/
 local_settings.py
 
 # Flask stuff:
@@ -110,6 +112,3 @@ images/
 
 # IDE
 .idea
-
-#media
-media

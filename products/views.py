@@ -8,7 +8,8 @@ from .forms import CommentForm
 
 
 def index(request):
-    return redirect(reverse('products:related_products_view', kwargs={'slug': 'all'}))
+    category = Category.objects.get_or_create(name='all')
+    return redirect(reverse('products:related_products_view', kwargs={'slug': category.slug, }))
 
 
 def related_products_view(request, slug):

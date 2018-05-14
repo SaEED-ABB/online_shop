@@ -1,7 +1,5 @@
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import reverse, redirect
-from django.http import HttpResponse, JsonResponse
-from django.contrib.auth.models import User
 
 from itertools import chain
 
@@ -9,11 +7,8 @@ from .models import Category, Product, Comment
 from .forms import CommentForm
 
 
-# def index(request):
-#     categories = Category.objects.all()
-#     related_products = Product.objects.all().order_by('-publish_date')
-#     cat_ancestors = Category.objects.filter(slug='all')
-#     return render(request, 'products/index.html', {'categories': categories, 'related_products': related_products, 'cat_ancestors': cat_ancestors, })
+def index(request):
+    return redirect(reverse('products:related_products_view', kwargs={'slug': 'all'}))
 
 
 def related_products_view(request, slug):
@@ -32,7 +27,7 @@ def related_products_view(request, slug):
                                                    'cat_children': category.children.all(),
                                                    'related_products': related_products,
                                                    'cat_ancestors': cat_ancestors,
-                                                   })
+                                                                })
 
 
 def product_detail(request, slug):
@@ -40,7 +35,7 @@ def product_detail(request, slug):
     comments = Comment.objects.filter(product=product).order_by('-publish_time')
     if request.method == 'POST':
         if not request.user.is_authenticated:
-            return redirect(reverse('registration:login'))
+            return redirect(reverse('users:login'))
         form = CommentForm(data=request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
@@ -50,18 +45,6 @@ def product_detail(request, slug):
 
     form = CommentForm()
     return render(request, 'products/product_detail.html', {'product': product, 'comments': comments, 'form': form, 'next': product.get_absolute_url()})
-
-
-def add_to_user_basket(request):
-    user = User.objects.get(username=request.POST.get('user_username'))
-    product = Product.objects.get(slug=request.POST.get('product_slug'))
-
-    basket = user.baskets.get_or_create(paid=False)[0]
-    basket.products.add(product)
-    basket.total_cost += product.cost
-    basket.save()
-
-    return JsonResponse({'message': '{} successfully added to your basket {}.'.format(product.name, user.username)})
 
 
 def show_basket(request):

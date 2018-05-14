@@ -18,11 +18,18 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from products.views import index
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('registration/', include('users.urls')),
+    path('users/', include('users.urls')),
     path('products/', include('products.urls')),
+
+    path('api/users/', include('users.api.urls')),
+    path('api/products/', include('products.api.urls')),
+
+    path('', index, name='index'),
 ]
 
 if settings.DEBUG:

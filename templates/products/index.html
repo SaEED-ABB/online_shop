@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load mptt_tags %}
+{% load humanize %}
+
+
+{% block content %}
+    <div class="jumbotron">
+        <h1>Welcome to online shop!</h1>
+        <b>categories: </b>
+        {% for cat in cat_ancestors %}
+            <a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>
+            {% if not forloop.last %}
+                ->
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-3 col-md-6 col-sm-3">
+            <div class="jumbotron">
+                {% if not category.name == 'all' %}
+                    <p class="list-group-item"><- <a href="{{ cat_parent.get_absolute_url }}">{{ cat_parent.name }}</a></p>
+                {% endif %}
+                <p class="list-group-item list-group-item-dark"><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></p>
+                <ul class="list-group">
+                    {% for cat_child in cat_children %}
+                        <li class="list-group-item list-group-item-secondary"><a href="{{ cat_child.get_absolute_url }}">- {{ cat_child.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-md-6 col-sm-9">
+            <div class="jumbotron">
+                {% if related_products %}
+                    {% for p in related_products %}
+                        {% if forloop.first %}<div class="row">{% endif %}
+                        <div class="product col-lg-3">
+                            <p><a href="{{ p.get_absolute_url }}"><h3>{{ p.name }}</h3></a><b>({{ p.cost|intcomma }} T.)</b></p>
+                            <p>(<a href="{{ p.category.get_absolute_url }}">{{ p.category.name }}</a>)</p>
+                            <p></p><img src="{{ p.image.url }}" class="image" height='{{ p.height }}' width='{{ p.width }}' alt="image not loaded.">
+                            <p><em>publish time: {{ p.publish_date }}</em></p>
+                        </div>
+                        {% if forloop.counter|divisibleby:4 %}
+                            </div><div class="row">
+                        {% endif %}
+                        {% if forloop.last %}</div>{% endif %}
+                    {% endfor %}
+                {% else %}
+                    <h2>No products found.</h2>
+                {% endif %}
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+{% endblock %}
+
+{% block stylesheet %}
+    <style>
+        .product {
+            border: 1px solid cadetblue;
+        }
+
+        .jumbotron {
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

@@ -31,14 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'users.apps.UsersConfig',
-    'products.apps.ProductsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users.apps.UsersConfig',
+    'products.apps.ProductsConfig',
     'mptt',
     'django.contrib.humanize',
 
@@ -59,7 +59,7 @@ ROOT_URLCONF = 'online_shop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,5 +135,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 from django.urls import reverse_lazy
 
 LOGIN_REDIRECT_URL = '/products/related_products/all'
-LOGIN_URL = reverse_lazy('registration:login')
-LOGOUT_URL = reverse_lazy('registration:logout')
+LOGIN_URL = reverse_lazy('users:login')
+LOGOUT_URL = reverse_lazy('users:logout')

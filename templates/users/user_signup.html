@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+
+{% block stylesheet %}
+
+{% endblock %}
+
+
+{% block javascript %}
+{#    <script>#}
+        $("#id_username").change(function () {
+            var form = $(this).closest("form");
+            $.ajax({
+                url: form.attr("data-validate-username-url"),
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (data) {
+                    if (data.is_taken) {
+                        alert(data.error_message);
+                        $("#id_username").val('');
+                    }
+                }
+            });
+        });
+{#    </script>#}
+{% endblock %}
+
+
+{% block content %}
+    <div class="jumbotron">
+        <form method="post" data-validate-username-url="{% url 'users_api:validate_username' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Sign Up">
+        </form>
+    </div>
+{% endblock %}

@@ -1,16 +1,25 @@
 {% extends 'base.html' %}
 
+
+{% block title %}
+    Login
+{% endblock %}
+
 {% block content %}
     <div class="row">
-        <div class="jumbotron col-lg-6 col-md-6 col-sm-6">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Login">
-            </form>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="jumbotron">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Login">
+                </form>
+            </div>
         </div>
-        <div class="jumbotron col-lg-6 col-md-6 col-sm-6">
-            {% include 'users/oauth_login_section.html' %}
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="jumbotron">
+                {% include 'users/oauth_login_section.html' %}
+            </div>
         </div>
     </div>
 {% endblock %}

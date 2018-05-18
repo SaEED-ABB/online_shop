@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
+{% block title %}
+    Basket
+{% endblock %}
+
 {% block content %}
     <div class="jumbotron">
         {% if basket.set_products.exists %}

@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
+
+{% block title %}
+    Product detail
+{% endblock %}
+
 {% block content %}
     <div class="jumbotron detailProduct">
         <h3>{{ product.name }}</h3>

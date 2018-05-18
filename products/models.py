@@ -18,7 +18,7 @@ class Category(MPTTModel):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        super().save()
+        return super(Category, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('products:related_products_view', kwargs={'slug': self.slug})
@@ -64,7 +64,7 @@ class Product(models.Model):
         else:
             self.width = int(self.width * limit / self.height)
             self.height = limit
-        super().save()
+        return super(Product, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('products:product_detail', kwargs={'slug': self.slug})
@@ -101,6 +101,11 @@ class SetProduct(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='set_product')
     counter = models.PositiveIntegerField(default=0)
     sum_price = models.PositiveIntegerField(default=0)
+
+    def delete(self, *args, **kwargs):
+        self.basket.total_price -= self.sum_price
+        self.basket.save()
+        return super(SetProduct, self).delete(*args, **kwargs)
 
     def __str__(self):
         return '{} * {}'.format(self.counter, self.product)

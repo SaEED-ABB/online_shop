@@ -49,7 +49,7 @@ def product_detail(request, slug):
 
 
 def show_basket(request):
-    basket = request.user.baskets.get(paid=False)
+    basket = request.user.baskets.get_or_create(paid=False)[0]
     return render(request, 'products/basket.html', {'basket': basket})
 
 

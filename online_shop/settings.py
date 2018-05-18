@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'products.apps.ProductsConfig',
     'mptt',
     'django.contrib.humanize',
-
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'social_django.middleware.SocialAuthExceptionMiddleware',  # <--
 ]
 
 ROOT_URLCONF = 'online_shop.urls'
@@ -67,6 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -105,6 +109,35 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Authentication backends
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',  # for Google authentication
+    'social_core.backends.github.GithubOAuth2',  # for Github authentication
+    'social_core.backends.facebook.FacebookOAuth2',  # for Facebook authentication
+    'social_core.backends.twitter.TwitterOAuth',  # for Twitter authentication
+    'social_core.backends.linkedin.LinkedinOAuth2',  # for Linkedin authentication
+    'social_core.backends.instagram.InstagramOAuth2',  # for instagram authentication
+
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '988170499521-gpqvbopchoahtsh3t9kul6ocjfh921r4.apps.googleusercontent.com'  # Paste CLient Key
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '4IeVnehP_rTvnWP3VMVfqE-L'  # Paste Secret Key
+
+SOCIAL_AUTH_GITHUB_KEY = '178492e503f14f8af29d'  # Paste Client ID
+SOCIAL_AUTH_GITHUB_SECRET = '0cc95973aeeb1267f5fc32663df9cec15534a15f'  # Paste Secret Key
+
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = '86euswxlv548xv'
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = '9y9wzo7MfWi1ilyy'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '1842613979090582'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = 'd2233074ab0ff14e9d93bba7db33adb6'  # App Secret
+
+SOCIAL_AUTH_TWITTER_KEY = 'jDKHu1rm9suclRvz0AwRTbDup'
+SOCIAL_AUTH_TWITTER_SECRET = 'vbNJ4DBqNVYFgseEUvZgCmR2FuQ0ZjjnSSn8pF5l3IHcfsBRhH'
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -132,8 +165,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
-from django.urls import reverse_lazy
-
-LOGIN_REDIRECT_URL = '/products/related_products/all'
-LOGIN_URL = reverse_lazy('users:login')
-LOGOUT_URL = reverse_lazy('users:logout')
+LOGIN_REDIRECT_URL = 'index'
+LOGIN_URL = 'users:login'
+LOGOUT_URL = 'users:logout'

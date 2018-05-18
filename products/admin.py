@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 
-from .models import Category, Product, Basket
+from .models import Category, Product, Basket, SetProduct
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -9,12 +9,15 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'slug', 'publish_date', 'cost')
+    list_display = ('name', 'category', 'slug', 'publish_date', 'price')
 
 
 class BasketAdmin(admin.ModelAdmin):
     list_display = ('user', 'create_time', 'pay_time', 'paid')
 
+
+class SetProductAdmin(admin.ModelAdmin):
+    list_display = ('basket', 'product', 'counter', 'sum_price')
 
 # class BasketInlineAdmin(admin.TabularInline):
 #     model = Basket
@@ -29,5 +32,6 @@ class BasketAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Basket, BasketAdmin)
+admin.site.register(SetProduct, SetProductAdmin)
 # admin.site.unregister(User)
 # admin.site.register(User, UserAdmin)

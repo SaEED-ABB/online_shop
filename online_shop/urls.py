@@ -29,6 +29,8 @@ urlpatterns = [
     path('api/users/', include('users.api.urls')),
     path('api/products/', include('products.api.urls')),
 
+    path('auth/', include('social_django.urls', namespace='social')),  # <- Here
+
     path('', index, name='index'),
 ]
 

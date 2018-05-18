@@ -5,7 +5,7 @@
     <div class="jumbotron detailProduct">
         <h3>{{ product.name }}</h3>
         <p>category: <a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></p>
-        <p><b>cost: {{ product.cost|intcomma }}</b> T.</p>
+        <p><b>price: {{ product.price|intcomma }}</b> T.</p>
         <div class="imageClass">
             <img src="{{ product.image.url }}" class="image" height='{% widthratio product.height 1 2 %}' width='{% widthratio product.width 1 2 %}' alt="image not loaded.">
         </div>

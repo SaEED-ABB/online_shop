@@ -27,11 +27,16 @@
 
 
 {% block content %}
-    <div class="jumbotron">
-        <form method="post" data-validate-username-url="{% url 'users_api:validate_username' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Sign Up">
-        </form>
+    <div class="row">
+        <div class="jumbotron col-lg-6 col-md-6 col-sm-6">
+            <form method="post" data-validate-username-url="{% url 'users_api:validate_username' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Sign Up">
+            </form>
+        </div>
+        <div class="jumbotron col-lg-6 col-md-6 col-sm-6">
+            {% include 'users/oauth_login_section.html' %}
+        </div>
     </div>
 {% endblock %}

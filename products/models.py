@@ -38,7 +38,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='related_products')
     slug = models.SlugField(unique=True, blank=True)
     publish_date = models.DateTimeField(auto_now_add=True)
-    cost = models.PositiveIntegerField(default=0)
+    price = models.PositiveIntegerField(default=0)
     text_info = models.TextField(max_length=10000, blank=True)
 
     width = models.IntegerField(blank=True, null=True)
@@ -86,9 +86,21 @@ class Comment(models.Model):
 
 
 class Basket(models.Model):
-    user = models.ForeignKey(User, models.CASCADE, related_name='baskets')
-    products = models.ManyToManyField(Product, related_name='related_baskets', blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='baskets')
     create_time = models.DateTimeField(auto_now_add=True)
     pay_time = models.DateTimeField(blank=True, null=True)
-    total_cost = models.PositiveIntegerField(default=0)
+    total_price = models.PositiveIntegerField(default=0)
     paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return 'basket for {}'.format(self.user.username)
+
+
+class SetProduct(models.Model):
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='set_products')
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='set_product')
+    counter = models.PositiveIntegerField(default=0)
+    sum_price = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return '{} * {}'.format(self.counter, self.product)

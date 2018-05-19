@@ -129,6 +129,12 @@ SOCIAL_AUTH_TWITTER_KEY = get_env_variable('ONLINE_SHOP_SOCIAL_AUTH_TWITTER_KEY'
 SOCIAL_AUTH_TWITTER_SECRET = get_env_variable('ONLINE_SHOP_SOCIAL_AUTH_TWITTER_SECRET')
 
 
+# auto posting
+
+TELEGRAM_CHAT_TOKEN = get_env_variable('ONLINE_SHOP_TELEGRAM_CHAT_TOKEN')
+TELEGRAM_CHAT_ID = get_env_variable('ONLINE_SHOP_TELEGRAM_CHAT_ID')
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 

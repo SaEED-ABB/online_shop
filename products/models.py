@@ -5,6 +5,7 @@ from django.shortcuts import reverse
 from django.contrib.auth.models import User
 
 from mptt.models import TreeForeignKey, MPTTModel
+from auto_posting.helpers import send_product
 
 
 class Category(MPTTModel):
@@ -45,6 +46,8 @@ class Product(models.Model):
     height = models.IntegerField(blank=True, null=True)
     image = models.ImageField(blank=True, upload_to='product_images', height_field='height', width_field='width')
 
+    on_telegram = models.BooleanField(default=True)
+
     def _get_unique_slug(self):
         slug = slugify(self.name)
         counter = 1
@@ -64,7 +67,10 @@ class Product(models.Model):
         else:
             self.width = int(self.width * limit / self.height)
             self.height = limit
-        return super(Product, self).save(*args, **kwargs)
+        save_result = super(Product, self).save(*args, **kwargs)
+        if self.on_telegram:
+            send_product.send_product(pro_obj=self)
+        return save_result
 
     def get_absolute_url(self):
         return reverse('products:product_detail', kwargs={'slug': self.slug})
